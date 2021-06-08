@@ -32,16 +32,31 @@ export default function App() {
       setBirthdate(birthdate + 2**chosenSet)
     }
     changeSet(chosenSet + 1)
+    if(chosenSet === 5) {
+      changeSet(0)
+      setBirthdate(0)
+    }
   }
-  console.log(chosenSet)
+  
   return (
     <View style={styles.container}>
       
       <Text>{chosenSet < 5 ? sets[chosenSet] : birthdate}</Text>
       <Text>{chosenSet < 5 ? "Is your birth day found in this set of numbers?" : null}</Text>
-      <View >
-        <Button title={"Yes"} onPress={() => handlePress(1)} />
-        <Button title={"No"} onPress={() => handlePress(0)} />
+      <View > 
+        { 
+        chosenSet < 5
+              ?
+        <View>
+            <Button title={"Yes"} onPress={() => handlePress(1)} />
+            <Button title={"No"} onPress={() => handlePress(0)} />
+        </View>
+
+        :
+        <Button title={"Replay"} onPress={() => handlePress(0)}/>
+        }
+        
+     
       </View>
       
       <StatusBar style="auto" />

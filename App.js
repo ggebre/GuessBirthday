@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
-import { StyleSheet, Text, Button, View } from 'react-native';
+import { StyleSheet, Text, Button, View, SafeAreaView , FlatList} from 'react-native';
 const set1 = "  1  3  5  7\n" +
 "  9 11 13 15\n" +
 " 17 19 21 23\n" + 
@@ -22,6 +22,7 @@ const set5 = " 16 17 18 19\n" +
 " 24 25 26 27\n" + 
 " 28 29 30 31";
 const sets =[set1, set2, set3, set4, set5]
+const widthProportion = '25%'
 export default function App() {
   const [chosenSet, changeSet] = useState(0)
   const [birthdate, setBirthdate] = useState(0)
@@ -32,43 +33,71 @@ export default function App() {
       setBirthdate(birthdate + 2**chosenSet)
     }
     changeSet(chosenSet + 1)
-    if(chosenSet === 5) {
+    if(chosenSet === setsLength) {
       changeSet(0)
       setBirthdate(0)
     }
   }
   
   return (
-    <View style={styles.container}>
-      
-      <Text>{chosenSet < 5 ? sets[chosenSet] : birthdate}</Text>
-      <Text>{chosenSet < 5 ? "Is your birth day found in this set of numbers?" : null}</Text>
-      <View > 
-        { 
-        chosenSet < 5
-              ?
+    <SafeAreaView style={styles.container}>
+      { chosenSet < 5 
+            ?
         <View>
+          <View style={styles.wrapper}>
+      
+      { 
+        sets[chosenSet].match(/\d+/g).map(day => <Text key={day} style={styles.dates}>{day}</Text>)
+      }
+          </View>
+
+          
+          <Text style={{fontSize: 18, textAlign: 'center', marginBottom: 15}}>Is your birth day found in this set of numbers?</Text>
+          
+
+          <View style={styles.wrapper}> 
             <Button title={"Yes"} onPress={() => handlePress(1)} />
             <Button title={"No"} onPress={() => handlePress(0)} />
+          </View>
         </View>
-
-        :
-        <Button title={"Replay"} onPress={() => handlePress(0)}/>
-        }
-        
-     
-      </View>
+            :
+        <View>
+          <Text style={{fontSize: 40}}>{birthdate}</Text>
+          <Button title={"Replay"} onPress={() => handlePress(0)}/>
+        </View>
+      
+      }
+      
       
       <StatusBar style="auto" />
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: 'lightblue',
     alignItems: 'center',
     justifyContent: 'center',
   },
+  wrapper: {
+    flex: 1, 
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignContent: 'center',
+    justifyContent: 'center'
+  },
+  dates: {
+    width: widthProportion,
+    alignSelf: 'center',
+    textAlign: 'center',
+    fontSize: 20
+  }
 });
+
+
+
+
+
+
